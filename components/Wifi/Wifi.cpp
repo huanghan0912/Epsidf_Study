@@ -12,15 +12,67 @@
 
 
 
-#define ESP_MAXIMUM_RETRY  1000
-
-
 #define WIFI_CONNECTED_BIT BIT0
 #define WIFI_FAIL_BIT      BIT1
 
-static const char *TAG = "wifi";
+static const char *TAG_STA = "wifi_STA";
+static const char *TAG_AP = "wifi_AP";
 
 static int s_retry_num = 0;
+
+
+/**
+ * @brief STA模式事件中断处理
+ * 
+ * @param arg 表示传递给handler函数的参数
+ * @param event_base 事件基
+ * @param event_id 表示事件ID
+ * @param event_data 表示传递给这个事件的数据
+ */
+void STA_event_handler(void* arg, esp_event_base_t event_base,
+                                int32_t event_id, void* event_data)
+{
+    if (event_base == WIFI_EVENT && event_id == WIFI_EVENT_STA_START) {
+        esp_wifi_connect();
+    } else if (event_base == WIFI_EVENT && event_id == WIFI_EVENT_STA_DISCONNECTED) {
+        if (s_retry_num < ESP_MAXIMUM_RETRY) {
+            esp_wifi_connect();
+            s_retry_num++;
+            ESP_LOGI(TAG_STA, "retry to connect to the AP");
+        } else {
+            xEventGroupSetBits(s_wifi_event_group, WIFI_FAIL_BIT);
+        }
+        ESP_LOGI(TAG_STA,"connect to the AP fail");
+    } else if (event_base == IP_EVENT && event_id == IP_EVENT_STA_GOT_IP) {
+        ip_event_got_ip_t* event = (ip_event_got_ip_t*) event_data;
+        ESP_LOGI(TAG_STA, "got ip:" IPSTR, IP2STR(&event->ip_info.ip));
+        s_retry_num = 0;
+        xEventGroupSetBits(s_wifi_event_group, WIFI_CONNECTED_BIT);
+    }
+}
+
+/**
+ * @brief ap模式事件中断处理
+ * 
+ * @param arg 表示传递给handler函数的参数
+ * @param event_base 事件基
+ * @param event_id 表示事件ID
+ * @param event_data 表示传递给这个事件的数据
+ */
+
+void AP_wifi_event_handler(void* arg, esp_event_base_t event_base,
+                                    int32_t event_id, void* event_data)
+{
+    if (event_id == WIFI_EVENT_AP_STACONNECTED) {
+        wifi_event_ap_staconnected_t* event = (wifi_event_ap_staconnected_t*) event_data;
+        ESP_LOGI(TAG_AP, "station "MACSTR" join, AID=%d",
+                 MAC2STR(event->mac), event->aid);
+    } else if (event_id == WIFI_EVENT_AP_STADISCONNECTED) {
+        wifi_event_ap_stadisconnected_t* event = (wifi_event_ap_stadisconnected_t*) event_data;
+        ESP_LOGI(TAG_AP, "station "MACSTR" leave, AID=%d",
+                 MAC2STR(event->mac), event->aid);
+    }
+}
 
 
 
@@ -37,36 +89,16 @@ void Wifi::STA_init(char* ssid,char* password){
         
 }
 
-/**
- * @brief 
- * 
- * @param arg 表示传递给handler函数的参数
- * @param event_base 事件基
- * @param event_id 表示事件ID
- * @param event_data 表示传递给这个事件的数据
- */
-void STA_event_handler(void* arg, esp_event_base_t event_base,
-                                int32_t event_id, void* event_data)
-{
-    if (event_base == WIFI_EVENT && event_id == WIFI_EVENT_STA_START) {
-        esp_wifi_connect();
-    } else if (event_base == WIFI_EVENT && event_id == WIFI_EVENT_STA_DISCONNECTED) {
-        if (s_retry_num < ESP_MAXIMUM_RETRY) {
-            esp_wifi_connect();
-            s_retry_num++;
-            ESP_LOGI(TAG, "retry to connect to the AP");
-        } else {
-            xEventGroupSetBits(s_wifi_event_group, WIFI_FAIL_BIT);
-        }
-        ESP_LOGI(TAG,"connect to the AP fail");
-    } else if (event_base == IP_EVENT && event_id == IP_EVENT_STA_GOT_IP) {
-        ip_event_got_ip_t* event = (ip_event_got_ip_t*) event_data;
-        ESP_LOGI(TAG, "got ip:" IPSTR, IP2STR(&event->ip_info.ip));
-        s_retry_num = 0;
-        xEventGroupSetBits(s_wifi_event_group, WIFI_CONNECTED_BIT);
-    }
-}
 
+void Wifi::AP_init(char* ssid,char* password){
+    strcpy((char *)wifi_config.ap.ssid,ssid);
+    strcpy((char *)wifi_config.ap.password, password);
+    wifi_config.ap.ssid_len = strlen(ssid);
+    wifi_config.ap.channel = CONFIG_ESP_WIFI_CHANNEL;
+    wifi_config.ap.max_connection = MAX_STA_CONNECT;
+    wifi_config.ap.authmode = WIFI_AUTH_WPA2_PSK;
+        
+}
 
 /**
  * @brief 开始wifi的STA模式
@@ -104,7 +136,7 @@ void Wifi::STA_begin(){
     ESP_ERROR_CHECK(esp_wifi_set_config(WIFI_IF_STA, &wifi_config) );
     ESP_ERROR_CHECK(esp_wifi_start() );
 
-    ESP_LOGI(TAG, "wifi_init_sta finished.");
+    ESP_LOGI(TAG_STA, "wifi_init_sta finished.");
 
     EventBits_t bits = xEventGroupWaitBits(s_wifi_event_group,
             WIFI_CONNECTED_BIT | WIFI_FAIL_BIT,
@@ -114,13 +146,13 @@ void Wifi::STA_begin(){
 
 
     if (bits & WIFI_CONNECTED_BIT) {
-        ESP_LOGI(TAG, "connected to ap SSID:%s password:%s",
+        ESP_LOGI(TAG_STA, "connected to ap SSID:%s password:%s",
                   wifi_config.sta.ssid,wifi_config.sta.password);
     } else if (bits & WIFI_FAIL_BIT) {
-        ESP_LOGI(TAG, "Failed to connect to SSID:%s, password:%s",
+        ESP_LOGI(TAG_STA, "Failed to connect to SSID:%s, password:%s",
                  wifi_config.sta.ssid,wifi_config.sta.password );
     } else {
-        ESP_LOGE(TAG, "UNEXPECTED EVENT");
+        ESP_LOGE(TAG_STA, "UNEXPECTED EVENT");
     }
 
 }
@@ -143,18 +175,19 @@ void Wifi::AP_begin(){
 
     ESP_ERROR_CHECK(esp_event_handler_instance_register(WIFI_EVENT,
                                                         ESP_EVENT_ANY_ID,
-                                                        &wifi_event_handler,
+                                                        &AP_wifi_event_handler,
                                                         NULL,
                                                         NULL));
 
-    wifi_config_t wifi_config = {
-    .ap = {
-        .ssid = "your_ssid",
-        .ssid_len = strlen("your_ssid"),
-        .channel = EXAMPLE_ESP_WIFI_CHANNEL,
-        .password = "password",
-        .max_connection = EXAMPLE_MAX_STA_CONN,
-        .authmode = WIFI_AUTH_WPA_WPA2_PSK
-        },
-    };
+    //如果密码为空,则设置为开放模式                                                  
+    if (strlen((char *)wifi_config.ap.password) == 0) {
+        wifi_config.ap.authmode = WIFI_AUTH_OPEN;
+    }
+
+    ESP_ERROR_CHECK(esp_wifi_set_mode(WIFI_MODE_AP));
+    ESP_ERROR_CHECK(esp_wifi_set_config(WIFI_IF_AP, &wifi_config));
+    ESP_ERROR_CHECK(esp_wifi_start());
+
+    ESP_LOGI(TAG_AP, "wifi_init_softap finished. SSID:%s password:%s channel:%d",
+            wifi_config.ap.ssid,wifi_config.ap.password,wifi_config.ap.channel);
 }
