@@ -31,15 +31,10 @@ static int s_retry_num = 0;
  * @param password wifi密码
  */
 void Wifi::init(char* ssid,char* password){
-    uint8_t Wifi_ssid[30],Wifi_password[30];
-    strcpy((char *)Wifi_ssid , ssid);
-    strcpy((char *)Wifi_password , password);
-    wifi_config={
-        .sta={
-            .ssid=Wifi_ssid[30],
-            .password=Wifi_password[30]
-        }
-    };
+    //给wifi_config中数据赋值
+    strcpy((char *)wifi_config.sta.ssid,ssid);
+    strcpy((char *)wifi_config.sta.password, password);
+        
 }
 
 /**
@@ -78,6 +73,8 @@ void event_handler(void* arg, esp_event_base_t event_base,
  * 
  */
 void Wifi::STA_begin(){
+
+
     //创建默认事件组
     s_wifi_event_group = xEventGroupCreate();
     //初始化潜在的TCP/IP 栈
@@ -118,12 +115,46 @@ void Wifi::STA_begin(){
 
     if (bits & WIFI_CONNECTED_BIT) {
         ESP_LOGI(TAG, "connected to ap SSID:%s password:%s",
-                 Wifi_ssid, Wifi_password);
+                  wifi_config.sta.ssid,wifi_config.sta.password);
     } else if (bits & WIFI_FAIL_BIT) {
         ESP_LOGI(TAG, "Failed to connect to SSID:%s, password:%s",
-                 Wifi_ssid, Wifi_password);
+                 wifi_config.sta.ssid,wifi_config.sta.password );
     } else {
         ESP_LOGE(TAG, "UNEXPECTED EVENT");
     }
 
+}
+
+
+/**
+ * @brief 开启AP模式
+ * 
+ */
+void Wifi::AP_begin(){
+    // //初始化潜在的TCP/IP 栈
+    ESP_ERROR_CHECK(esp_netif_init());
+
+    ESP_ERROR_CHECK(esp_event_loop_create_default());
+
+    esp_netif_create_default_wifi_ap();
+
+    wifi_init_config_t cfg = WIFI_INIT_CONFIG_DEFAULT();
+    ESP_ERROR_CHECK(esp_wifi_init(&cfg));
+
+    ESP_ERROR_CHECK(esp_event_handler_instance_register(WIFI_EVENT,
+                                                        ESP_EVENT_ANY_ID,
+                                                        &wifi_event_handler,
+                                                        NULL,
+                                                        NULL));
+
+    wifi_config_t wifi_config = {
+    .ap = {
+        .ssid = "your_ssid",
+        .ssid_len = strlen("your_ssid"),
+        .channel = EXAMPLE_ESP_WIFI_CHANNEL,
+        .password = "password",
+        .max_connection = EXAMPLE_MAX_STA_CONN,
+        .authmode = WIFI_AUTH_WPA_WPA2_PSK
+        },
+    };
 }
