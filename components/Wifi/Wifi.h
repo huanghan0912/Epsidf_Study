@@ -22,7 +22,7 @@
 
 
 static EventGroupHandle_t s_wifi_event_group;
-void event_handler(void* arg, esp_event_base_t event_base,int32_t event_id, void* event_data);
+void STA_event_handler(void* arg, esp_event_base_t event_base,int32_t event_id, void* event_data);
 
 class Wifi
 {
@@ -32,7 +32,7 @@ private:
     uint8_t Wifi_password[30];
 public:
     //初始化wifi
-    void init(char* ssid,char* password);
+    void STA_init(char* ssid,char* password);
     //开启STA模式
     void STA_begin();
     //wifi开始寻找附近wifi

@@ -30,7 +30,7 @@ static int s_retry_num = 0;
  * @param ssid wifi网络广播
  * @param password wifi密码
  */
-void Wifi::init(char* ssid,char* password){
+void Wifi::STA_init(char* ssid,char* password){
     //给wifi_config中数据赋值
     strcpy((char *)wifi_config.sta.ssid,ssid);
     strcpy((char *)wifi_config.sta.password, password);
@@ -45,7 +45,7 @@ void Wifi::init(char* ssid,char* password){
  * @param event_id 表示事件ID
  * @param event_data 表示传递给这个事件的数据
  */
-void event_handler(void* arg, esp_event_base_t event_base,
+void STA_event_handler(void* arg, esp_event_base_t event_base,
                                 int32_t event_id, void* event_data)
 {
     if (event_base == WIFI_EVENT && event_id == WIFI_EVENT_STA_START) {
@@ -91,12 +91,12 @@ void Wifi::STA_begin(){
     esp_event_handler_instance_t instance_got_ip;
     ESP_ERROR_CHECK(esp_event_handler_instance_register(WIFI_EVENT,//事件基，代表事件的大类
                                                         ESP_EVENT_ANY_ID,//事件ID,从ap中获取ip
-                                                        &event_handler,
+                                                        &STA_event_handler,
                                                         NULL,//表示需要传递给handler函数的参数
                                                         &instance_any_id));//类型为：esp_event_handler_instance_t指针
     ESP_ERROR_CHECK(esp_event_handler_instance_register(IP_EVENT,
                                                         IP_EVENT_STA_GOT_IP,
-                                                        &event_handler,
+                                                        &STA_event_handler,
                                                         NULL,
                                                         &instance_got_ip));
 
