@@ -27,7 +27,7 @@ void event_handler(void* arg, esp_event_base_t event_base,int32_t event_id, void
 class Wifi
 {
 private:
-    wifi_config_t wifi_config
+    wifi_config_t wifi_config;
     uint8_t Wifi_ssid[30];
     uint8_t Wifi_password[30];
 public:
@@ -35,6 +35,8 @@ public:
     void init(char* ssid,char* password);
     //开启STA模式
     void STA_begin();
+    //wifi开始寻找附近wifi
+    void scan();
     //开始AP模式
     void AP_begin();
     //开启AP STA共存模式
