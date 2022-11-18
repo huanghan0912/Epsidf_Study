@@ -10,6 +10,8 @@
 #ifndef _WIFI_H_
 #define _WIFI_H_
 
+
+#include "user_config.h"
 #include "string.h"
 #include "freertos/FreeRTOS.h"
 #include "freertos/task.h"
@@ -23,14 +25,14 @@
 
 /*******************************************个人配置*************************************************/
 
-//esp连接最大等待事件
-#define ESP_MAXIMUM_RETRY  1000
+//esp连接最大等待时间
+#define ESP_MAXIMUM_RETRY  USER_ESP_MAXIMUM_RETRY
 //AP模式最大可连接量
-#define MAX_STA_CONNECT 5
+#define MAX_STA_CONNECT USER_MAX_STA_CONNECT
 //AP模式信道
-#define CONFIG_ESP_WIFI_CHANNEL 12
+#define CONFIG_ESP_WIFI_CHANNEL USER_CONFIG_ESP_WIFI_CHANNEL
 //扫描ap的最大数量
-#define DEFAULT_SCAN_LIST_SIZE 10
+#define DEFAULT_SCAN_LIST_SIZE USER_DEFAULT_SCAN_LIST_SIZE
 
 /*******************************************全局变量*****************************************************/
 static EventGroupHandle_t s_wifi_event_group;
@@ -60,13 +62,13 @@ private:
 public:
     //初始化wifi
     void init();
-    //开启STA模式
+    //开始STA模式
     void STA_begin(char* ssid,char* password);
     //wifi开始寻找附近wifi
     void scan();
     //开始AP模式
     void AP_begin(char* Your_ssid,char* Your_password);
-    //开启AP STA共存模式
+    //TODO:开启AP STA共存模式
     void STA_AP_begin();
     //
 };

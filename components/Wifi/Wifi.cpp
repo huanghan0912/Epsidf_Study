@@ -75,8 +75,6 @@ void wifi_event_handler(void* arg, esp_event_base_t event_base,
 /**
  * @brief 初始化wifi
  * 
- * @param ssid wifi网络广播
- * @param password wifi密码
  */
 void Wifi::init(){
    //创建默认事件组
@@ -110,9 +108,12 @@ void Wifi::init(){
 
 
 
+
 /**
- * @brief 开始wifi的STA模式
+ * @brief wifi的STA模式开启
  * 
+ * @param ssid wifi广播
+ * @param password wifi密码
  */
 void Wifi::STA_begin(char* ssid,char* password){
 
@@ -145,7 +146,15 @@ void Wifi::STA_begin(char* ssid,char* password){
 
 }
 
+
+
+/**
+ * @brief 开启wifi扫描
+ * 
+ */
 void Wifi::scan(){
+    ESP_ERROR_CHECK(esp_wifi_set_mode(WIFI_MODE_STA) );
+    ESP_ERROR_CHECK(esp_wifi_start() );
     ESP_ERROR_CHECK(esp_wifi_scan_start(NULL, true));
     ESP_ERROR_CHECK(esp_wifi_scan_get_ap_records(&number, ap_info));// 获取搜索的具体AP信息
     ESP_ERROR_CHECK(esp_wifi_scan_get_ap_num(&ap_count));		//接入点的数量
@@ -159,8 +168,10 @@ void Wifi::scan(){
 
 
 /**
- * @brief 开启AP模式
+ * @brief wifi的STA模式开启
  * 
+ * @param ssid wifi广播
+ * @param password wifi密码
  */
 void Wifi::AP_begin(char* ssid,char* password){
 
