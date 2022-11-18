@@ -114,3 +114,5 @@ uint8_t Wifi_password[30];
 
 
 
+# 待补充
+- wifi中扫描的ap_info在flash分配了,后续可以节省空间进行删除操作
