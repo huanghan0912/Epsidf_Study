@@ -26,6 +26,9 @@
 #define UART_BUF_SIZE		1024
 
 
+
+
+
 class Uart
 {
 private:
@@ -40,21 +43,29 @@ private:
         .flow_ctrl = UART_HW_FLOWCTRL_DISABLE,
         .source_clk = UART_SCLK_APB,
     };
+
 public:
     //选择uart端口号
     void init(uart_port_t uart_num);
     //设置uart的引脚
     void set_pin(int UART_TXD, int UART_RXD, int UART_RTS, int UART_CTS);
     //发送数据
-    void sendData(const char *data);
-    
+    void sendData(const char *data,const char *TAG);
     
     
     //清除uart
     void uart_delete();
+
+
+
+    //
+    uart_port_t get_uart_num();
 };
 
-
+ //发送数据任务
+static void sendData_task(void *arg);
+//接收数据任务
+static void receiveData_task(void *arg);
 
 
 #endif
