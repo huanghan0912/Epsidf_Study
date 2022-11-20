@@ -50,8 +50,9 @@ public:
     //设置uart的引脚
     void set_pin(int UART_TXD, int UART_RXD, int UART_RTS, int UART_CTS);
     //发送数据
-    void sendData(const char *data,const char *TAG);
-    
+    void send_data(const char *data,const char *TAG);
+    //创建接收数据任务
+    void create_receive_task(void* uart,unsigned int Priority);
     
     //清除uart
     void uart_delete();
@@ -62,10 +63,10 @@ public:
     uart_port_t get_uart_num();
 };
 
- //发送数据任务
-static void sendData_task(void *arg);
+//  //发送数据任务
+// void send_data_task(void *arg);
 //接收数据任务
-static void receiveData_task(void *arg);
+void receive_data_task(void *arg);
 
 
 #endif

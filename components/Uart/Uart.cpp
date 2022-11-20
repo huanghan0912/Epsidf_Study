@@ -14,30 +14,30 @@ const char *TAG_Uart = "uart";
 
 
 
-/**
- * @brief 发送数据任务
- * 
- * @param  
- */
-static void sendData_task(void *arg){
-    Uart* uart=(Uart*)arg;
-    static const char *TASK_TAG = "sendData_task";
-    //为给定标签设置日志级别。
-    esp_log_level_set(TASK_TAG, ESP_LOG_INFO);
-    while (1)
-    {
-        //TODO:发送数据设置
-        uart->sendData("test",TASK_TAG);
-        vTaskDelay(2000 / portTICK_PERIOD_MS);
-    }
-}
+// /**
+//  * @brief 发送数据任务
+//  * 
+//  * @param  
+//  */
+//  void send_data_task(void *arg){
+//     Uart* uart=(Uart*)arg;
+//     static const char *TASK_TAG = "sendData_task";
+//     //为给定标签设置日志级别。
+//     esp_log_level_set(TASK_TAG, ESP_LOG_INFO);
+//     while (1)
+//     {
+//         //TODO:发送数据设置
+//         uart->send_data("test",TASK_TAG);
+//         vTaskDelay(2000 / portTICK_PERIOD_MS);
+//     }
+// }
 
 /**
  * @brief 接收数据任务
  * 
  * @param arg 
  */
-static void receiveData_task(void *arg){
+ void receive_data_task(void *arg){
     Uart* uart=(Uart*)arg;
     static const char *TASK_TAG = "receiveData_task";
     //为给定标签设置日志级别。
@@ -92,11 +92,21 @@ void Uart::set_pin(int UART_TXD, int UART_RXD, int UART_RTS=-1, int UART_CTS=-1)
  * @param data 数据内容
  * @param TAG 调试输出(方便调试)
  */
-void Uart::sendData(const char *data,const char *TAG= "uart"){
+void Uart::send_data(const char *data,const char *TAG= "uart"){
     const int len = strlen(data);//计算数据长度
     const int txBytes = uart_write_bytes(UART_NUM_1, data, len);
     // ESP_LOGI("Write %d bytes", txBytes);
     ESP_LOGI(TAG, "Write %d bytes", txBytes);
+}
+
+/**
+ * @brief 
+ * 
+ * @param uart 
+ * @param Priority 
+ */
+void Uart::create_receive_task(void* uart,unsigned int Priority){
+    xTaskCreate(receive_data_task, "uart_Rx_task", 1024*2,uart,Priority, NULL);
 }
 
 
