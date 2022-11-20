@@ -54,6 +54,7 @@ public:
     //创建接收数据任务
     void create_receive_task(void* uart,unsigned int Priority);
     
+    
     //清除uart
     void uart_delete();
 
