@@ -30,6 +30,7 @@ const char *TAG_Uart = "uart";
 //         uart->send_data("test",TASK_TAG);
 //         vTaskDelay(2000 / portTICK_PERIOD_MS);
 //     }
+//    vTaskDelete(NULL);
 // }
 
 /**
@@ -53,6 +54,7 @@ const char *TAG_Uart = "uart";
         }
     }
     free(data);//释放内存块
+    vTaskDelete(NULL);
 }
 
 
