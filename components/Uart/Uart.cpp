@@ -102,10 +102,10 @@ void Uart::send_data(const char *data,const char *TAG= "uart"){
 }
 
 /**
- * @brief 
+ * @brief 创建一个接收任务
  * 
- * @param uart 
- * @param Priority 
+ * @param uart 自己new的类
+ * @param Priority 优先级
  */
 void Uart::create_receive_task(void* uart,unsigned int Priority){
     xTaskCreate(receive_data_task, "uart_Rx_task", 1024*2,uart,Priority, NULL);
