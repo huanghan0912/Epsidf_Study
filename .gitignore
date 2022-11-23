@@ -3,4 +3,3 @@ sdkconfig
 sdkconfig.old
 .vscode/
 .devcontainer/
-main/
