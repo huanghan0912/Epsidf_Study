@@ -23,7 +23,7 @@
 #define SD_CLK  GPIO_NUM_7
 #define SD_CS   GPIO_NUM_4
 //#define MOUNT_POINT  "/sdcard"
-#define SPI_DMA_CHAN    0
+#define SPI_DMA_CHAN    SPI_DMA_CH_AUTO
 
 
 /*******************************************************Sd类******************************************************/
