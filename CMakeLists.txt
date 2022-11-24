@@ -4,5 +4,18 @@
 # CMakeLists in this exact order for cmake to work correctly
 cmake_minimum_required(VERSION 3.5)
 
-include($ENV{IDF_PATH}/tools/cmake/project.cmake)
-project(Epsidf_Study)
+
+
+set(includedirs
+    ../components/core/Sd
+    ../components/core/Wifi
+    ../components/core/Http
+    ../components/core/Spi
+    ../components/core/I2c
+    ../components/core/Uart
+    .
+ )
+
+idf_component_register(SRCS "main.cpp"
+                    INCLUDE_DIRS "." "${includedirs}")
+

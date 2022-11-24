@@ -11,7 +11,7 @@
 #define _WIFI_H_
 
 
-#include "user_config.h"
+#include "../../user_config.h"
 #include "string.h"
 #include "freertos/FreeRTOS.h"
 #include "freertos/task.h"
