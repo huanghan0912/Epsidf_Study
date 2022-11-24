@@ -4,18 +4,27 @@
 # CMakeLists in this exact order for cmake to work correctly
 cmake_minimum_required(VERSION 3.5)
 
-
-
-set(includedirs
-    ../components/core/Sd
-    ../components/core/Wifi
-    ../components/core/Http
-    ../components/core/Spi
-    ../components/core/I2c
-    ../components/core/Uart
+set( SRCS
+    core/Sd/Sd.cpp
+    core/Wifi/Wifi.cpp
+    core/Http/Http.cpp
+    core/Spi/Spi.cpp
+    core/I2c/I2c.cpp
+    core/Uart/Uart.cpp
     .
  )
 
-idf_component_register(SRCS "main.cpp"
+set(includedirs
+    core/Sd
+    core/Wifi
+    core/Http
+    core/Spi
+    core/I2c
+    core/Uart
+    .
+ )
+
+
+idf_component_register(SRCS "main.cpp" "${SRCS}"
                     INCLUDE_DIRS "." "${includedirs}")
 
