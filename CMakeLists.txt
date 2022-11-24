@@ -11,8 +11,8 @@ set( SRCS
     core/Spi/Spi.cpp
     core/I2c/I2c.cpp
     core/Uart/Uart.cpp
-    .
  )
+
 
 set(includedirs
     core/Sd
@@ -25,6 +25,14 @@ set(includedirs
  )
 
 
-idf_component_register(SRCS "main.cpp" "${SRCS}"
-                    INCLUDE_DIRS "." "${includedirs}")
+ set(COMPONENT_REQUIRES
+    esp_http_server
+    fatfs
+    )
+
+
+
+idf_component_register(SRCS  "${SRCS}"
+                    INCLUDE_DIRS "." "${includedirs}" 
+                    PRIV_REQUIRES "${COMPONENT_REQUIRES}")
 

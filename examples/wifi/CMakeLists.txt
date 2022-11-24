@@ -1,3 +1,3 @@
-set(Wifi "../components/Wifi")
-idf_component_register(SRCS "main.cpp"
+set(Wifi "/core/Wifi")
+idf_component_register(SRCS "wifi_main.cpp"
                     INCLUDE_DIRS "." "${Wifi}")
