@@ -1,7 +1,7 @@
 #ifndef _SPI_H_
 #define _SPI_H_
 
-#include "user_config.h"
+#include "../../user_config.h"
 #include "driver/spi_common.h"
 #include "driver/spi_master.h"
 

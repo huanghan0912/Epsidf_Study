@@ -13,9 +13,9 @@
 #include "esp_log.h"
 #include "esp_http_server.h"
 
-esp_err_t Http_handler(httpd_req_t *req);
+esp_err_t HttpHandler(httpd_req_t *req);
 
-class Http
+class HttpServer
 {
 private:
      httpd_config_t config;
@@ -23,11 +23,11 @@ private:
      httpd_uri_t test_uri = {
         .uri      = "/",
         .method   = HTTP_GET,
-        .handler  = Http_handler,
+        .handler  = HttpHandler,
         .user_ctx = NULL
     };
 public:
-    httpd_handle_t  init();
+    httpd_handle_t  Init();
     
 };
 

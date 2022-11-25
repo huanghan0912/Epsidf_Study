@@ -76,7 +76,7 @@ void wifi_event_handler(void* arg, esp_event_base_t event_base,
  * @brief 初始化wifi
  * 
  */
-void Wifi::init(){
+void Wifi::Init(){
    //创建默认事件组
     s_wifi_event_group = xEventGroupCreate();
     //初始化潜在的TCP/IP 栈
@@ -115,14 +115,14 @@ void Wifi::init(){
  * @param ssid wifi广播
  * @param password wifi密码
  */
-void Wifi::STA_begin(char* ssid,char* password){
+void Wifi::BeginSTA(char* ssid,char* password){
 
-     //给wifi_config中数据赋值
-    strcpy((char *)wifi_config.sta.ssid,ssid);
-    strcpy((char *)wifi_config.sta.password, password);
+     //给_wifi_config中数据赋值
+    strcpy((char *)_wifi_config.sta.ssid,ssid);
+    strcpy((char *)_wifi_config.sta.password, password);
     
     ESP_ERROR_CHECK(esp_wifi_set_mode(WIFI_MODE_STA) );
-    ESP_ERROR_CHECK(esp_wifi_set_config(WIFI_IF_STA, &wifi_config) );
+    ESP_ERROR_CHECK(esp_wifi_set_config(WIFI_IF_STA, &_wifi_config) );
     ESP_ERROR_CHECK(esp_wifi_start() );
 
     ESP_LOGI(TAG_STA, "wifi_init_sta finished.");
@@ -136,10 +136,10 @@ void Wifi::STA_begin(char* ssid,char* password){
 
     if (bits & WIFI_CONNECTED_BIT) {
         ESP_LOGI(TAG_STA, "connected to ap SSID:%s password:%s",
-                  wifi_config.sta.ssid,wifi_config.sta.password);
+                  _wifi_config.sta.ssid,_wifi_config.sta.password);
     } else if (bits & WIFI_FAIL_BIT) {
         ESP_LOGI(TAG_STA, "Failed to connect to SSID:%s, password:%s",
-                 wifi_config.sta.ssid,wifi_config.sta.password );
+                 _wifi_config.sta.ssid,_wifi_config.sta.password );
     } else {
         ESP_LOGE(TAG_STA, "UNEXPECTED EVENT");
     }
@@ -152,17 +152,17 @@ void Wifi::STA_begin(char* ssid,char* password){
  * @brief 开启wifi扫描
  * 
  */
-void Wifi::scan(){
+void Wifi::Scan(){
     ESP_ERROR_CHECK(esp_wifi_set_mode(WIFI_MODE_STA) );
     ESP_ERROR_CHECK(esp_wifi_start() );
     ESP_ERROR_CHECK(esp_wifi_scan_start(NULL, true));
-    ESP_ERROR_CHECK(esp_wifi_scan_get_ap_records(&number, ap_info));// 获取搜索的具体AP信息
-    ESP_ERROR_CHECK(esp_wifi_scan_get_ap_num(&ap_count));		//接入点的数量
-    ESP_LOGI(TAG_STA, "Total APs scanned = %u", ap_count);
-    for (int i = 0; (i < DEFAULT_SCAN_LIST_SIZE) && (i < ap_count); i++) {
-		ESP_LOGI(TAG_STA, "SSID \t\t%s", ap_info[i].ssid);		// 打印WIFI名称
-		ESP_LOGI(TAG_STA, "RSSI \t\t%d", ap_info[i].rssi);		// 打印信号强度	
-		ESP_LOGI(TAG_STA, "Channel \t\t%d\n", ap_info[i].primary);
+    ESP_ERROR_CHECK(esp_wifi_scan_get_ap_records(&number, _ap_info));// 获取搜索的具体AP信息
+    ESP_ERROR_CHECK(esp_wifi_scan_get_ap_num(&_ap_count));		//接入点的数量
+    ESP_LOGI(TAG_STA, "Total APs scanned = %u", _ap_count);
+    for (int i = 0; (i < DEFAULT_SCAN_LIST_SIZE) && (i < _ap_count); i++) {
+		ESP_LOGI(TAG_STA, "SSID \t\t%s", _ap_info[i].ssid);		// 打印WIFI名称
+		ESP_LOGI(TAG_STA, "RSSI \t\t%d", _ap_info[i].rssi);		// 打印信号强度	
+		ESP_LOGI(TAG_STA, "Channel \t\t%d\n", _ap_info[i].primary);
 	}
 }
 
@@ -173,24 +173,24 @@ void Wifi::scan(){
  * @param ssid wifi广播
  * @param password wifi密码
  */
-void Wifi::AP_begin(char* ssid,char* password){
+void Wifi::BeginAP(char* ssid,char* password){
 
-    strcpy((char *)wifi_config.ap.ssid,ssid);
-    strcpy((char *)wifi_config.ap.password, password);
-    wifi_config.ap.ssid_len = strlen(ssid);
-    wifi_config.ap.channel = CONFIG_ESP_WIFI_CHANNEL;
-    wifi_config.ap.max_connection = MAX_STA_CONNECT;
-    wifi_config.ap.authmode = WIFI_AUTH_WPA2_PSK;
+    strcpy((char *)_wifi_config.ap.ssid,ssid);
+    strcpy((char *)_wifi_config.ap.password, password);
+    _wifi_config.ap.ssid_len = strlen(ssid);
+    _wifi_config.ap.channel = CONFIG_ESP_WIFI_CHANNEL;
+    _wifi_config.ap.max_connection = MAX_STA_CONNECT;
+    _wifi_config.ap.authmode = WIFI_AUTH_WPA2_PSK;
 
     //如果密码为空,则设置为开放模式                                                  
-    if (strlen((char *)wifi_config.ap.password) == 0) {
-        wifi_config.ap.authmode = WIFI_AUTH_OPEN;
+    if (strlen((char *)_wifi_config.ap.password) == 0) {
+        _wifi_config.ap.authmode = WIFI_AUTH_OPEN;
     }
 
     ESP_ERROR_CHECK(esp_wifi_set_mode(WIFI_MODE_AP));
-    ESP_ERROR_CHECK(esp_wifi_set_config(WIFI_IF_AP, &wifi_config));
+    ESP_ERROR_CHECK(esp_wifi_set_config(WIFI_IF_AP, &_wifi_config));
     ESP_ERROR_CHECK(esp_wifi_start());
 
     ESP_LOGI(TAG_AP, "wifi_init_softap finished. SSID:%s password:%s channel:%d",
-            wifi_config.ap.ssid,wifi_config.ap.password,wifi_config.ap.channel);
+            _wifi_config.ap.ssid,_wifi_config.ap.password,_wifi_config.ap.channel);
 }

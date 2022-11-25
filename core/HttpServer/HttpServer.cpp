@@ -1,9 +1,9 @@
-#include "Http.h"
+#include "HttpServer.h"
 
 
 static const char *TAG_HTTP="Http" ;
 
-httpd_handle_t  Http::init(){
+httpd_handle_t HttpServer::Init(){
     config = HTTPD_DEFAULT_CONFIG();
     if (httpd_start(&server, &config) == ESP_OK) {
         ESP_ERROR_CHECK(httpd_register_uri_handler(server,&test_uri));
@@ -12,7 +12,7 @@ httpd_handle_t  Http::init(){
     return server;
 }
 
-esp_err_t Http_handler(httpd_req_t *req)
+esp_err_t HttpHandler(httpd_req_t *req)
 {
     const char resp[] = "<h1>Hello World</h1>";
     httpd_resp_send(req, resp, HTTPD_RESP_USE_STRLEN);

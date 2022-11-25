@@ -11,7 +11,7 @@
 #ifndef _UART_H_
 #define _UART_H_
 
-#include "user_config.h"
+#include "../../user_config.h"
 #include <stdio.h>
 #include "freertos/FreeRTOS.h"
 #include "freertos/task.h"

@@ -51,24 +51,24 @@ class Wifi
 {
 private:
     //扫描出ap,和其数目
-    wifi_ap_record_t ap_info[DEFAULT_SCAN_LIST_SIZE];
-    uint16_t ap_count = 0;	
+    wifi_ap_record_t _ap_info[DEFAULT_SCAN_LIST_SIZE];
+    uint16_t _ap_count = 0;	
     //wifi配置
-    wifi_config_t wifi_config;
+    wifi_config_t _wifi_config;
     //wifi名称和密码
-    uint8_t Wifi_ssid[30];
-    uint8_t Wifi_password[30];
+    uint8_t _wifi_ssid[30];
+    uint8_t _wifi_password[30];
 public:
     //初始化wifi
-    void init();
+    void Init();
     //开始STA模式
-    void STA_begin(char* ssid,char* password);
+    void BeginSTA(char* ssid,char* password);
     //wifi开始寻找附近wifi
-    void scan();
+    void Scan();
     //开始AP模式
-    void AP_begin(char* Your_ssid,char* Your_password);
+    void BeginAP(char* Your_ssid,char* Your_password);
     //TODO:开启AP STA共存模式
-    void STA_AP_begin();
+    void BeginSTAAP();
     //
 };
 
