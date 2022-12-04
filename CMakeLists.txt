@@ -4,16 +4,9 @@
 # CMakeLists in this exact order for cmake to work correctly
 cmake_minimum_required(VERSION 3.5)
 
-# file(GLOB SRCS *.cpp)
-# list(APPEND SOURCES "core/Sd/Sd.cpp")
-# list(APPEND SOURCES "core/Wifi/Wifi.cpp")
-# list(APPEND SOURCES "core/HttpServer/HttpServer.cpp")
-# list(APPEND SOURCES "core/HttpClient/HttpClient.cpp")
-# list(APPEND SOURCES "core/Spi/Spi.cpp")
-# list(APPEND SOURCES "core/I2c/I2c.cpp")
-# list(APPEND SOURCES "core/Uart/Uart.cpp")
 
-set( SRCS
+
+set( SRCS_CORE
     core/Sd/Sd.cpp
     core/Wifi/Wifi.cpp
     core/HttpServer/HttpServer.cpp
@@ -23,8 +16,13 @@ set( SRCS
     core/Uart/Uart.cpp
  )
 
+set( SRCS_DEVICES
+    devices/St7789/St7789.cpp
+)
 
-set(includedirs
+
+
+set(INCLUDE_CORE
     core/Sd/.
     core/Wifi/.
     core/HttpServer/.
@@ -34,6 +32,11 @@ set(includedirs
     core/Uart/.
     .
  )
+ set(INCLUDE_DEVICES
+    devices/St7789/.
+    .
+ )
+
 
 
  set(COMPONENT_REQUIRES
@@ -44,7 +47,7 @@ set(includedirs
 
 
 
-idf_component_register(SRCS   "${SRCS}"
-                    INCLUDE_DIRS "${includedirs} " 
+idf_component_register(SRCS   "${SRCS_CORE}" "${SRCS_DEVICES}"
+                    INCLUDE_DIRS "${INCLUDE_CORE} "  "${INCLUDE_DEVICES} " 
                     PRIV_REQUIRES "${COMPONENT_REQUIRES}" )
 
