@@ -28,7 +28,7 @@ esp_err_t Spi::Init(const spi_host_device_t spi_peripheral, const int pin_miso,
     return status;
 }
 
-esp_err_t Spi::AddSlaveDevice(const uint8_t mode, const int ss, const int clock_speed_devider)
+esp_err_t Spi::AddSlaveDevice(const uint8_t mode, const int ss,const uint8_t command_lengh,const uint8_t address_lengh, const int clock_speed_devider)
 {
     esp_err_t status = ESP_OK;
 
@@ -37,8 +37,10 @@ esp_err_t Spi::AddSlaveDevice(const uint8_t mode, const int ss, const int clock_
      _spi_interface_cfg.clock_speed_hz = clock_speed_devider; // 80MHz/10 = 8MHz SPI speed
     _spi_interface_cfg.spics_io_num = ss;
     _spi_interface_cfg.queue_size = 7;
+    _spi_interface_cfg.command_bits=command_lengh;
+    _spi_interface_cfg.address_bits=address_lengh;
 
-    status |= spi_bus_add_device(_spi_peripheral, &_spi_interface_cfg, &_handle);
+    status |= spi_bus_add_device(_spi_peripheral, &_spi_interface_cfg, &spi);
 
     return status;
 }
@@ -51,9 +53,32 @@ esp_err_t Spi::WriteCmd(const uint8_t command){
      _spi_transaction.user=(void*)0;
      return spi_device_polling_transmit(spi, &_spi_transaction);
 }
-esp_err_t Spi::WriteRegisterMultipleBytes( uint8_t* reg_data_buffer, const int data_length, const uint8_t command = 0)
+
+
+esp_err_t Spi::WriteMultipleBytes( uint8_t* reg_data_buffer, const int byte_length, const uint8_t command)
 {
+     spi_transaction_t _spi_transaction;
+     memset(&_spi_transaction, 0, sizeof(_spi_transaction));  
+     _spi_transaction.length=8*byte_length;
+     _spi_transaction.cmd=command;
+     _spi_transaction.tx_buffer=reg_data_buffer;
+     _spi_transaction.user=(void*)0;
+     return spi_device_polling_transmit(spi, &_spi_transaction);
 }
+
+esp_err_t Spi::WriteMultipleBytes( uint16_t* reg_data_buffer, const int byte_length, const uint8_t command)
+{
+     spi_transaction_t _spi_transaction;
+     memset(&_spi_transaction, 0, sizeof(_spi_transaction));  
+     _spi_transaction.length=16*byte_length;
+     _spi_transaction.cmd=command;
+     _spi_transaction.tx_buffer=reg_data_buffer;
+     _spi_transaction.user=(void*)0;
+     return spi_device_polling_transmit(spi, &_spi_transaction);
+}
+
+
+
 
 
 

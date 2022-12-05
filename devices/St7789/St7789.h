@@ -18,18 +18,25 @@
 
 
 #define PIN_NUM_MISO -1
-#define PIN_NUM_MOSI GPIO_NUM_21
-#define PIN_NUM_CLK  GPIO_NUM_20
-#define PIN_NUM_CS   GPIO_NUM_39
-#define PIN_NUM_RES  GPIO_NUM_36
-#define PIN_NUM_DC   GPIO_NUM_38
-#define PIN_NUM_BLK  GPIO_NUM_40
+#define PIN_NUM_MOSI GPIO_NUM_12
+#define PIN_NUM_CLK  GPIO_NUM_13
+#define PIN_NUM_CS   GPIO_NUM_9
+#define PIN_NUM_RES  GPIO_NUM_11
+#define PIN_NUM_DC   GPIO_NUM_10             
+#define PIN_NUM_BLK  GPIO_NUM_40 
+
+// #define PIN_NUM_MOSI GPIO_NUM_22
+// #define PIN_NUM_CLK  GPIO_NUM_21
+// #define PIN_NUM_CS   GPIO_NUM_18
+// #define PIN_NUM_RES  GPIO_NUM_19
+// #define PIN_NUM_DC   GPIO_NUM_23
+// #define PIN_NUM_BLK  GPIO_NUM_5
 
 #define LCD_W 240
 #define LCD_H 240
 
 #define DMA_CHANNEL SPI_DMA_CH_AUTO
-#define SPI_HOST SPI2_HOST
+#define SPI_HOST SPI3_HOST
 
 
 #define BLK_ON()    gpio_set_level(PIN_NUM_BLK,1);
@@ -59,10 +66,10 @@ private:
 public:
     void Init();
     //LCD清屏函数
-    void clear();
-    void LCD_Address_Set(uint16_t x1,uint16_t y1,uint16_t x2,uint16_t y2);
-    void LCD_Clear(uint16_t Color);
-    void LCD_Fill(uint16_t x1,uint16_t y1,uint16_t x2,uint16_t y2,uint16_t *color);	
+    void Clear(uint16_t Color);
+    void SetAddress(uint16_t x1,uint16_t y1,uint16_t x2,uint16_t y2);
+    void Fill(uint16_t x1,uint16_t y1,uint16_t x2,uint16_t y2,uint16_t *color);	
+    void SetOrientation(uint8_t orientation);
 };
 
 
