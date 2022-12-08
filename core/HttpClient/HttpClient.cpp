@@ -9,7 +9,7 @@
  */
 #include "HttpClient.h"
 #include "string.h"
-#include "ESP_LOG.h"
+#include "esp_log.h"
 
 
 static const char *TAG_HTTP="HttpClient";

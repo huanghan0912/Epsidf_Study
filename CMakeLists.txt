@@ -23,18 +23,16 @@ set( SRCS_DEVICES
 
 
 set(INCLUDE_CORE
-    core/Sd/.
-    core/Wifi/.
-    core/HttpServer/.
-    core/HttpClient/.
-    core/Spi/.
-    core/I2c/.
-    core/Uart/.
-    .
- )
+    core/Sd
+    core/Wifi
+    core/HttpServer
+    core/HttpClient
+    core/Spi
+    core/I2c
+    core/Uart
+)
  set(INCLUDE_DEVICES
-    devices/St7789/.
-    .
+    devices/St7789
  )
 
 
@@ -43,11 +41,14 @@ set(INCLUDE_CORE
     esp_http_server
     esp_http_client
     fatfs
+    nvs_flash 
+    esp_event 
+    esp_wifi
     )
 
 
 
 idf_component_register(SRCS   "${SRCS_CORE}" "${SRCS_DEVICES}"
-                    INCLUDE_DIRS "${INCLUDE_CORE} "  "${INCLUDE_DEVICES} " 
+                    INCLUDE_DIRS "${INCLUDE_CORE}" "${INCLUDE_DEVICES}" 
                     PRIV_REQUIRES "${COMPONENT_REQUIRES}" )
 

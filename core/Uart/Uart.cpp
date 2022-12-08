@@ -45,7 +45,7 @@ const char *TAG_Uart = "uart";
     esp_log_level_set(TASK_TAG, ESP_LOG_INFO);
     uint8_t* data = (uint8_t*) malloc(UART_BUF_SIZE+1);//分配一个内存块
     while (1) {
-        const int rxBytes = uart_read_bytes(uart->get_uart_num(), data, UART_BUF_SIZE, 1000 / portTICK_RATE_MS);//返回数据的长度
+        const int rxBytes = uart_read_bytes(uart->get_uart_num(), data, UART_BUF_SIZE, 1000 / portTICK_PERIOD_MS);//返回数据的长度
         if (rxBytes > 0) {
             data[rxBytes] = 0;
             ESP_LOGI(TASK_TAG, "Read %d bytes: '%s'", rxBytes, data);
