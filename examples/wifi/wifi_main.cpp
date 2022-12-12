@@ -26,7 +26,7 @@ extern "C" void app_main(void) {
     }
     ESP_ERROR_CHECK(err);
     
-    wifi.init();
+    wifi.Init();
     wifi.AP_begin("12","12345678");
     wifi.STA_begin("H-H","2235812260");
     wifi.scan();
