@@ -186,6 +186,10 @@ void St7789::Init(){
     LcdWriteData(0x00);
     LcdWriteData(0xEF);    // 239
 
+    LcdWriteCmd(0x51);    // Write brightness
+    LcdWriteData(0xFF);
+    
+
     LcdWriteCmd(0x2B);    // Row address set
     LcdWriteData(0x00);
     LcdWriteData(0x00);
