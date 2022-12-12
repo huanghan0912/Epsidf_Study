@@ -18,9 +18,9 @@
 #include "sdmmc_cmd.h"
 
 /*******************************************************个人配置***********************************************/
-#define SD_MISO GPIO_NUM_5
+#define SD_MISO GPIO_NUM_7
 #define SD_MOSI GPIO_NUM_6
-#define SD_CLK  GPIO_NUM_7
+#define SD_CLK  GPIO_NUM_5
 #define SD_CS   GPIO_NUM_4
 //#define MOUNT_POINT  "/sdcard"
 #define SPI_DMA_CHAN    SPI_DMA_CH_AUTO
@@ -38,7 +38,7 @@ private:
    char mount_point[20] = "/sdcard";
 public:
     //初始化sd卡
-    void init();
+    void Init();
    
 };
 

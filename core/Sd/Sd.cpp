@@ -8,7 +8,7 @@ static const char *TAG = "Sd";
  * 
  */
 
-void Sd::init(){
+void Sd::Init(){
     // VFS配置
     //挂载文件系统的选项。
     //如果 format_if_mount_failed 设置为 true，SD 卡将被分区并格式化以防挂载失败。

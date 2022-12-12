@@ -21,12 +21,12 @@
 
 
 #define PIN_NUM_MISO -1
-#define PIN_NUM_MOSI GPIO_NUM_12
-#define PIN_NUM_CLK  GPIO_NUM_13
-#define PIN_NUM_CS   GPIO_NUM_9
+#define PIN_NUM_MOSI GPIO_NUM_10
+#define PIN_NUM_CLK  GPIO_NUM_9
+#define PIN_NUM_CS   GPIO_NUM_12
 #define PIN_NUM_RES  GPIO_NUM_11
-#define PIN_NUM_DC   GPIO_NUM_10             
-#define PIN_NUM_BLK  GPIO_NUM_40 
+#define PIN_NUM_DC   GPIO_NUM_12            
+#define PIN_NUM_BLK  GPIO_NUM_NC
 
 // #define PIN_NUM_MOSI GPIO_NUM_22
 // #define PIN_NUM_CLK  GPIO_NUM_21

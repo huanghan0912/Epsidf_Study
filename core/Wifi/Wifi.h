@@ -68,8 +68,7 @@ public:
     //开始AP模式
     void BeginAP(char* Your_ssid,char* Your_password);
     //TODO:开启AP STA共存模式
-    void BeginSTAAP();
-    //
+    void BeginSTA_AP();
 };
 
 
