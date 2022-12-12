@@ -8,6 +8,9 @@
  * 
  */
 
+#ifndef _ST7789_H_
+#define _ST7789_H_
+
 #include "driver/gpio.h"
 #include "freertos/FreeRTOS.h"
 #include "freertos/task.h"
@@ -71,5 +74,7 @@ public:
     void Fill(uint16_t x1,uint16_t y1,uint16_t x2,uint16_t y2,uint16_t *color);	
     void SetOrientation(uint8_t orientation);
 };
+
+#endif
 
 

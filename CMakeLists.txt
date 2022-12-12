@@ -44,11 +44,12 @@ set(INCLUDE_CORE
     nvs_flash 
     esp_event 
     esp_wifi
+    driver
     )
 
 
 
 idf_component_register(SRCS   "${SRCS_CORE}" "${SRCS_DEVICES}"
                     INCLUDE_DIRS "${INCLUDE_CORE}" "${INCLUDE_DEVICES}" 
-                    PRIV_REQUIRES "${COMPONENT_REQUIRES}" )
+                    REQUIRES "${COMPONENT_REQUIRES}" )
 
