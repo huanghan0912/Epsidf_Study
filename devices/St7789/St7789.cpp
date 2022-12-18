@@ -62,7 +62,7 @@ IRAM_ATTR void St7789::Fill(uint16_t x1,uint16_t y1,uint16_t x2,uint16_t y2,uint
 
 	if(size==0)
 	{
-		printf("size=%ld\r\n",size);
+		printf("size=%d\r\n",size);
 		return;
 	}
 	for(int i=0;i<send_cnt;i++){
