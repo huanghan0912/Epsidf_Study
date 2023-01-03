@@ -29,6 +29,7 @@ public:
     void GetResponse(char *Response);
 
     void close();
+    void del();
 
 };
 
