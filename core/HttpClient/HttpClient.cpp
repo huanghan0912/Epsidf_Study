@@ -87,3 +87,7 @@ void HttpClient::GetResponse(char *Response){
 void HttpClient::close(){
     esp_http_client_close(client);
 }
+
+void HttpClient::del(){
+    esp_http_client_cleanup(client);
+}
